@@ -1,10 +1,17 @@
 from django.shortcuts import render #HttpResponse
 from .models import Usuario
 
-def home(request):
-    return render(request, 'usuarios/home.html')
+def index(request):
+    return render(request, 'usuarios/index.html')
 
     #return HttpResponse("Hello, World!")
+
+# def home(request):
+    # return render(request, 'usuarios/home.html')
+
+def login(request):
+    return render(request, 'usuarios/login.html')
+
 
 def usuarios(request):
     # Salvar os dados da tela para o banco de dados
