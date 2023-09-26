@@ -11,6 +11,6 @@ urlpatterns = [
     path('usuarios/',views.usuarios,name='listagem_usuarios'),
 
     # usuarios.com/login
-    path('login/',views.login,name='login')
+    path('login/',views.login,name='login'),
 
 ]
