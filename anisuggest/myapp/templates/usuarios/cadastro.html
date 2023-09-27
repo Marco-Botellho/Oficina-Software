@@ -8,7 +8,7 @@
     <meta name="keywords" content="Anime, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Anisuggest | Login</title>
+    <title>Anisuggest | Cadastro</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -73,7 +73,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="normal__breadcrumb__text">
-                        <h2>Login</h2>
+                        <h2>Tela de Cadastro de Novo Usuário</h2>
                         <p>Bem Vindo ao Sistema de Recomendações de Animes - Anisuggest.</p>
                     </div>
                 </div>
@@ -88,8 +88,16 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="login__form">
-                        <h3>Login</h3>
+                        <h3>Novo Cadastro</h3>
                         <form action="#">
+                            <div class="input__item">
+                                <input type="text" placeholder="Nome">
+                                <span class="icon_mail"></span>
+                            </div>
+                            <div class="input__item">
+                                <input type="text" placeholder="Sobrenome">
+                                <span class="icon_mail"></span>
+                            </div>
                             <div class="input__item">
                                 <input type="text" placeholder="Endereço de Email">
                                 <span class="icon_mail"></span>
@@ -98,22 +106,13 @@
                                 <input type="text" placeholder="Senha">
                                 <span class="icon_lock"></span>
                             </div>
-                            <button type="submit" class="site-btn">Realizar Login</button>
+                            <div class="input__item">
+                                <input type="text" placeholder="Confirmar Senha">
+                                <span class="icon_lock"></span>
+                            </div>
+                            <button type="submit" class="site-btn">Realizar Cadastro</button>
                         </form>
-                        <a href="#" class="forget_pass">Esqueceu sua senha?</a>
                     </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="login__register">
-                        <h3>Não é cadastrado?</h3>
-                        <a href="{% url 'cadastro' %}" class="primary-btn">Registre-se Agora</a>
-
-                        <!--<a href="../cadastro" class="primary-btn">Registre-se Agora</a>-->
-                    </div>
-                </div>
-            </div>
-            <div class="login__social">
-                <div class="row d-flex justify-content-center">
                 </div>
             </div>
         </div>

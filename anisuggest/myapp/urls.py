@@ -13,4 +13,7 @@ urlpatterns = [
     # usuarios.com/login
     path('login/',views.login,name='login'),
 
+    # usuarios.com/cadastro
+    path('cadastro/',views.cadastro,name='cadastro'),
+
 ]

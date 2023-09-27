@@ -13,6 +13,9 @@ def index(request):
 def login(request):
     return render(request, 'usuarios/login.html')
 
+def cadastro(request):
+    return render(request, 'usuarios/cadastro.html')
+
 
 def usuarios(request):
     # Salvar os dados da tela para o banco de dados
