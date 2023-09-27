@@ -26,3 +26,4 @@ class UsuarioForm(forms.ModelForm):
             'sobrenome',
             'email',
         )
+ 
