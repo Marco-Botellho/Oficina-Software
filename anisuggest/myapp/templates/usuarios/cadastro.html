@@ -89,7 +89,8 @@
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>Informe os seguintes campos:</h3>
-                        <form action="#">
+                        <form action="." method="POST">
+                            {% csrf_token %}
                             <div class="input__item">
                                 <input type="text" id="first_name" name="first_name" autocomplete="off" placeholder="Nome">
                                 <span class="icon_mail"></span>
@@ -102,6 +103,7 @@
                                 <input type="text" id="email" name="email" autocomplete="off" placeholder="Endereço de Email">
                                 <span class="icon_mail"></span>
                             </div>
+                            <!--
                             <div class="input__item">
                                 <input type="text" id="password" name="password" placeholder="Senha">
                                 <span class="icon_lock"></span>
@@ -109,7 +111,7 @@
                             <div class="input__item">
                                 <input type="text" id="password2" name="password2" placeholder="Confirmar Senha">
                                 <span class="icon_lock"></span>
-                            </div>
+                            </div>-->
                             <button type="submit" class="site-btn">Realizar Cadastro</button>
                         </form>
                     </div>

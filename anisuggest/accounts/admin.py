@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import AuditEntry, Document, Profile, User
 
-
 class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
