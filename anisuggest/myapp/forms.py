@@ -1,9 +1,10 @@
+"""
 # accounts/forms.py
 from django import forms
-from .models import Usuario
+#from .models import Usuario
 
 
-from backend.accounts.models import User
+from accounts.models import User
 
 
 class UsuarioForm(forms.ModelForm):
@@ -25,5 +26,4 @@ class UsuarioForm(forms.ModelForm):
             'nome',
             'sobrenome',
             'email',
-        )
- 
+        )""" 

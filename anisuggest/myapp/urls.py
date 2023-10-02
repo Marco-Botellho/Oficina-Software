@@ -8,7 +8,7 @@ urlpatterns = [
     # path('',views.home,name="home"),
 
     # usuarios.com/usuarios
-    path('usuarios/',views.usuarios,name='listagem_usuarios'),
+    # path('usuarios/',views.usuarios,name='listagem_usuarios'),
 
     # usuarios.com/login
     path('login/',views.login,name='login'),
