@@ -92,15 +92,15 @@
                         <form action="." method="POST">
                             {% csrf_token %}
                             <div class="input__item">
-                                <input type="text" id="first_name" name="first_name" autocomplete="off" placeholder="Nome">
+                                <input type="text" id="first_name" name="first_name" autocomplete="off" placeholder="Nome" required>
                                 <span class="icon_mail"></span>
                             </div>
                             <div class="input__item">
-                                <input type="text" id="last_name" name="last_name" placeholder="Sobrenome">
+                                <input type="text" id="last_name" name="last_name" placeholder="Sobrenome" required>
                                 <span class="icon_mail"></span>
                             </div>
                             <div class="input__item">
-                                <input type="text" id="email" name="email" autocomplete="off" placeholder="Endereço de Email">
+                                <input type="text" id="email" name="email" autocomplete="off" placeholder="Endereço de Email" required>
                                 <span class="icon_mail"></span>
                             </div>
                             <!--
