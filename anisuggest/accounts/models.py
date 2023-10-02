@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import User
+
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.core.mail import send_mail
 from django.db import models
@@ -126,7 +128,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    instance.objects.save()
+    #instance.profile.save()
+
 
 
 class Document(TimeStampedModel):
