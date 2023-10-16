@@ -9,9 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os
 from pathlib import Path
-from decouple import config
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,9 +25,7 @@ SECRET_KEY = "django-insecure-$xkku-a@&%vd@j#v!jini+v)rob%cjsbnb!*bxk(5cn_*90uw2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-AUTH_USER_MODEL = 'accounts.User'
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,8 +38,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "myapp",
-    "accounts",
-    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -89,29 +83,15 @@ DATABASES = {
 }
 
 
-
-# Email config
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', 'maob.ufsj@gmail.com')
-EMAIL_HOST = config('EMAIL_HOST', 'localhost')
-EMAIL_PORT = config('EMAIL_PORT', 1025, cast=int)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', '')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

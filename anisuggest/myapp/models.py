@@ -5,7 +5,7 @@ class Usuario(models.Model):
     nome = models.TextField(max_length=100)
     sobrenome = models.TextField(max_length=100)
     email = models.EmailField(unique=True)"""
-
+"""
 class TimeStampedModel(models.Model):
     created = models.DateTimeField(
         'criado em',
@@ -26,4 +26,4 @@ class Active(models.Model):
     active = models.BooleanField('ativo', default=True)
 
     class Meta:
-        abstract = True
+        abstract = True"""

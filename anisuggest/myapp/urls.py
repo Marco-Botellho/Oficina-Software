@@ -16,4 +16,7 @@ urlpatterns = [
     # usuarios.com/cadastro
     path('cadastro/',views.cadastro,name='cadastro'),
 
+    # usuarios.com/logado
+    path('logado/',views.logado,name='logado'),
+
 ]
