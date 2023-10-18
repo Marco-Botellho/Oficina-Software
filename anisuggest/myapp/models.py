@@ -1,29 +1,24 @@
 from django.db import models
 
-"""
-class Usuario(models.Model):
-    nome = models.TextField(max_length=100)
-    sobrenome = models.TextField(max_length=100)
-    email = models.EmailField(unique=True)"""
-"""
-class TimeStampedModel(models.Model):
-    created = models.DateTimeField(
-        'criado em',
-        auto_now_add=True,
-        auto_now=False
-    )
-    modified = models.DateTimeField(
-        'modificado em',
-        auto_now_add=False,
-        auto_now=True
-    )
+class Animes(models.Model):
+    anime_id = models.IntegerField(blank=True, null=True)
+    name = models.TextField(blank=True, null=True)
+    genre = models.TextField(blank=True, null=True)
+    type = models.TextField(blank=True, null=True)
+    episodes = models.IntegerField(blank=True, null=True)
+    rating = models.FloatField(blank=True, null=True)
+    members = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        abstract = True
+        managed = False
+        db_table = 'animes'
 
 
-class Active(models.Model):
-    active = models.BooleanField('ativo', default=True)
+class Rating(models.Model):
+    user_id = models.IntegerField(blank=True, null=True)
+    anime_id = models.IntegerField(blank=True, null=True)
+    rating = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        abstract = True"""
+        managed = False
+        db_table = 'rating'

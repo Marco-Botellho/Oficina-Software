@@ -1,14 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from .models import Animes
+from .models import Rating
 
 def index(request):
     return render(request, 'usuarios/index.html')
-
-# class SignUp(generic.CreateView):
-#     form_class = UserCreationForm
-#     success_url = reverse_lazy('login')
-#     template_name = 'cadastrar.html'
 
 def cadastro(request):
     if request.method == "POST":
@@ -38,4 +35,10 @@ def login(request):
 
 #verificar essa view
 def logado(request):
-    return render(request, 'usuarios/logado.html')
+
+    animes = Animes.objects.all()
+    context = {
+        'animes': animes
+    }
+
+    return render(request, 'usuarios/logado.html', context)
