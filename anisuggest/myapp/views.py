@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .models import Animes
 from .models import Rating
+from django.contrib.auth.decorators import login_required
+
 
 def index(request):
     return render(request, 'usuarios/index.html')
@@ -33,7 +35,21 @@ def login(request):
             return redirect('logado')
     return render(request, 'usuarios/login.html')
 
-#verificar essa view
+def logout_view(request):
+    logout(request)
+    return redirect('usuarios/index.html')
+
+"""
+@login_required
+def user_area(request, id):
+    profile = Profile.objects.filter(id=id).first()
+    context = {
+        'profile':profile,
+        'incomes':profile.income.all()
+    }
+    return render(request, 'user_area.html', context)
+    """
+
 def logado(request):
 
     animes = Animes.objects.all()

@@ -9,6 +9,9 @@ urlpatterns = [
     # usuarios.com/login
     path('login/',views.login,name='login'),
 
+    # usuarios.com/login
+    path('', views.logout_view, name= 'logout'),
+
     # usuarios.com/cadastro
     path('cadastro/',views.cadastro,name='cadastro'),
 
