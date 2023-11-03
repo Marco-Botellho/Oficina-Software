@@ -32,24 +32,22 @@ def login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('logado')
+            return redirect('logado', id=user.user_profile.id)
     return render(request, 'usuarios/login.html')
 
 def logout_view(request):
     logout(request)
     return redirect('usuarios/index.html')
 
-"""
-@login_required
-def user_area(request, id):
-    profile = Profile.objects.filter(id=id).first()
-    context = {
-        'profile':profile,
-        'incomes':profile.income.all()
-    }
-    return render(request, 'user_area.html', context)
-    """
 
+@login_required
+def logado(request, id):
+    user_profile = User.objects.filter(id=id).first()
+    
+    return render(request, 'logado.html', context)
+    
+
+@login_required
 def logado(request):
 
     animes = Animes.objects.all()
