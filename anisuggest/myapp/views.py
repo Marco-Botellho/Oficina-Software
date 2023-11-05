@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Animes
 from .models import Rating
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.template import loader
 
 
 def index(request):
@@ -56,3 +58,12 @@ def logado(request):
     }
 
     return render(request, 'usuarios/logado.html', context)
+
+
+def filtro(request):
+  mydata = Animes.objects.filter(name__icontains='naruto').order_by('name', 'anime_id').values()
+  template = loader.get_template('usuarios/filtro.html')
+  context = {
+    'filtragem': mydata
+  }
+  return HttpResponse(template.render(context, request))

@@ -18,4 +18,7 @@ urlpatterns = [
     # usuarios.com/logado
     path('logado/',views.logado,name='logado'),
 
+    # usuarios.com/filtro
+    path('filtro/',views.filtro,name='filtro'),
+
 ]
