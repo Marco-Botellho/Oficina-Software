@@ -47,7 +47,7 @@ def logado(request, id):
     return render(request, 'logado.html', context)
     
 
-@login_required
+#@login_required
 def logado(request):
 
     animes = Animes.objects.all()
