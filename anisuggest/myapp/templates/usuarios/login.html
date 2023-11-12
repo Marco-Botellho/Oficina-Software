@@ -89,7 +89,7 @@
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>Login</h3>
-                        <form action="{% url 'logado' %}" method="POST">
+                        <form action="{% url 'login' %}" method="POST">
                             {% csrf_token %}
                             <div class="input__item">
                                 <input id="id_email" type="email" name="email" placeholder="Endereço de Email" required>
