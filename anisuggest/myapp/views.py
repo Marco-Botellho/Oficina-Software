@@ -61,7 +61,7 @@ def logado(request):
 
 
 def filtro(request):
-  mydata = Animes.objects.filter(name__icontains='naruto').order_by('name', 'anime_id').values()
+  mydata = Animes.objects.filter(name__icontains='one punch').order_by('name', 'id').values()
   template = loader.get_template('usuarios/filtro.html')
   context = {
     'filtragem': mydata
