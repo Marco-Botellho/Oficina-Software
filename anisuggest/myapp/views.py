@@ -125,18 +125,26 @@ def filtro(request):
         data_query['name__icontains'] = filtro_anime
 
     filtragem = Animes.objects.filter(**data_query).order_by('name', 'id')
-
-    # Filtrar apenas valores únicos na coluna "name"
-    unique_names = set()
-    unique_results = []
     
-    for anime in filtragem:
-        if anime.name not in unique_names:
-            unique_names.add(anime.name)
-            unique_results.append(anime)
+    if filtragem.exists():
+        # Filtrar apenas valores únicos na coluna "name"
+        unique_names = set()
+        unique_results = []
+        
+        for anime in filtragem:
+            if anime.name not in unique_names:
+                unique_names.add(anime.name)
+                unique_results.append(anime)
+        
+        context = {
+            'id': id,
+            'filtragem': unique_results
+        }
 
-    context = {
-        'id': id,
-        'filtragem': unique_results
-    }
+    else:
+        # Se não houver resultados, definir a variável filtragem como None
+        context = {
+            'id': id,
+            'filtragem': None
+        }
     return render(request, 'usuarios/filtro.html', context)

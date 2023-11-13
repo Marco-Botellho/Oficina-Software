@@ -50,7 +50,7 @@
                             <ul>
                                 <li class="active"><a href="{% url 'index' %}">Página Inicial</a></li>
                                 <li><a href="{% url 'filtro' %}">Filtrar</a></li>
-                                <li><a href="#">Listar</a></li>
+                                <li><a href="#">Avaliar</a></li>
                                 <li><a href="#">Recomendações</a></li>
                             </ul>
                         </nav>
@@ -84,33 +84,38 @@
                 </form>
             </div>
 
-            <table class="table">
-                {% csrf_token %}
-                <thead>
-                    <tr class="bg-danger text-white" >
-                        <th scope="col">Id</th>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Genêro</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Episódios</th>
-                        <th scope="col">Avaliação</th>
-                        <!--<th scope="col">Membros</th>-->
-                    </tr>
-                </thead>
-                <tbody class="table-dark">
-                    {% for x in filtragem %}
-                    <tr>
-                        <td>{{ x.id }}</td>
-                        <td>{{ x.name }}</td>
-                        <td>{{ x.genre }}</td>
-                        <td>{{ x.type }}</td>
-                        <td>{{ x.episodes }}</td>
-                        <td>{{ x.rating }}</td>
-                        <!--<td>{{ x.members }}</td>-->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% if filtragem %}
+                <table class="table">
+                    {% csrf_token %}
+                    <thead>
+                        <tr class="bg-danger text-white" >
+                            <th scope="col">Id</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Genêro</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Episódios</th>
+                            <th scope="col">Avaliação</th>
+                            <!--<th scope="col">Membros</th>-->
+                        </tr>
+                    </thead>
+                    <tbody class="table-dark">
+                        {% for x in filtragem %}
+                        <tr>
+                            <td>{{ x.id }}</td>
+                            <td>{{ x.name }}</td>
+                            <td>{{ x.genre }}</td>
+                            <td>{{ x.type }}</td>
+                            <td>{{ x.episodes }}</td>
+                            <td>{{ x.rating }}</td>
+                            <!--<td>{{ x.members }}</td>-->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% elif request.GET.anime %}
+                <p>Nenhum resultado encontrado.</p>
+            {% endif %}
 
         </div>
     </section>
@@ -139,7 +144,7 @@
                     <ul>
                         <li class="active"><a href="{% url 'index' %}">Página Inicial</a></li>
                         <li><a href="{% url 'filtro' %}">Filtrar</a></li>
-                        <li><a href="#">Listar Anime</a></li>
+                        <li><a href="#">Avaliar</a></li>
                         <li><a href="#">Recomendações</a></li>
                     </ul>
                 </div>
