@@ -95,6 +95,7 @@
                             <th scope="col">Tipo</th>
                             <th scope="col">Episódios</th>
                             <th scope="col">Avaliação</th>
+                            <th scope="col">Avaliar</th>
                             <!--<th scope="col">Membros</th>-->
                         </tr>
                     </thead>
@@ -107,11 +108,56 @@
                             <td>{{ x.type }}</td>
                             <td>{{ x.episodes }}</td>
                             <td>{{ x.rating }}</td>
+                            <td>
+                                <button type="button" class="btn-avaliar" data-anime-id="{{ x.id }}" data-toggle="modal" data-target="#modalAvaliacao">
+                                    Avaliar
+                                </button>
+                            </td>
                             <!--<td>{{ x.members }}</td>-->
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+
+                <!-- Modal de Avaliação -->
+                <div class="modal fade" id="modalAvaliacao" tabindex="-1" role="dialog" aria-labelledby="modalAvaliacaoLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalAvaliacaoLabel">Avaliação do Anime</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="#" id="formAvaliacao">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="anime_id" id="animeId" value="">
+                                    {{ rating_form.as_p }}
+                                    <button type="submit" class="btn btn-primary">Salvar Avaliação</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exibir mensagens de sucesso ou erro após a avaliação -->
+                {% for message in messages %}
+                    <div>{{ message }}</div>
+                {% endfor %}
+
+                <script>
+                    // Atualiza o valor do campo anime_id no formulário de avaliação com base no botão clicado
+                    $('.btn-avaliar').on('click', function() {
+                        var animeId = $(this).data('anime-id');
+                        $('#animeId').val(animeId);
+                    });
+
+                    // Limpa o formulário de avaliação ao fechar o modal
+                    $('#modalAvaliacao').on('hidden.bs.modal', function (e) {
+                        $('#formAvaliacao')[0].reset();
+                    });
+                </script>
 
             {% elif request.GET.anime %}
                 <p>Nenhum resultado encontrado.</p>

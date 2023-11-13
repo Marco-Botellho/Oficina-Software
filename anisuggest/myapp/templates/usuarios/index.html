@@ -45,27 +45,10 @@
                 </div>
                 <div class="col-lg-8">
                     <div class="header__nav">
-                        {% if user.is_authenticated %}
-                            <script>
-                                alert("Você precisa estar logado para acessar esse campo.");
-                                // Redirecione para a página de login ou faça outra ação apropriada
-                                // window.location.href = "{% url 'login' %}";
-                            </script>
-                        {% endif %}
-
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li class="active"><a href="{% url 'index' %}">Página Inicial</a></li>
-                                
-                                {% if user.is_authenticated %}
-                                    <li><a href="{% url 'filtro' %}">Filtrar</a></li>
-                                {% else %}
-                                    <li>
-                                        <a href="#" onclick="alert('Você precisa estar logado para acessar essa área.'); return false;">
-                                            Filtrar
-                                        </a>
-                                    </li>
-                                {% endif %}
+                                <li><a href="#">Filtrar</a></li>
                                 <li><a href="#">Avaliar</a></li>
                                 <li><a href="#">Recomendações</a></li>
                             </ul>
@@ -76,7 +59,7 @@
                 <div class="col-lg-2">
                     <div class="header__right">
                         <!--<a href="#" class="search-switch"><span class="icon_search"></span></a>-->
-                        <a href="{% url 'login' %}"><span class="icon_profile"></span></a>
+                        <a href="{% url 'login' %}"><span class="icon_profile"></span>Login</a>
                     </div>
                 </div>
             </div>
