@@ -33,6 +33,10 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user.pk)
+    
+    @property
+    def first_name(self):
+        return self.user.first_name
 
 
 @receiver(post_save, sender=User)
@@ -43,6 +47,7 @@ def update_user_profile(sender, instance, created, **kwargs):
 
 
 class Rating(models.Model):
+    id = models.AutoField(primary_key=True)
     user_id = models.IntegerField(blank=True, null=True)
     anime_id = models.IntegerField(blank=True, null=True)
     rating = models.IntegerField(blank=True, null=True)

@@ -31,7 +31,9 @@ def cadastro(request):
                 # Verificar se o usuário já possui um perfil
                 if not hasattr(user, 'profile'):
                     # Criar o perfil associado ao usuário
-                    profile = Profile.objects.create(user=user, nome=first_name)
+                    profile = Profile.objects.create(user=user)
+                    profile.nome = first_name
+                    profile.save()
 
                 return redirect('login')
     return render(request, 'usuarios/cadastro.html')
