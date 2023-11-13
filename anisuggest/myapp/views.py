@@ -8,7 +8,6 @@ from django.template import loader
 from django.urls import reverse
 
 
-
 def index(request):
     return render(request, 'usuarios/index.html')
 
@@ -23,10 +22,17 @@ def cadastro(request):
         if password == confirm_password:
             # Verificar se o email já está em uso
             if not User.objects.filter(username=email).exists():
+                # Criar o usuário
                 user = User.objects.create_user(email=email, username=email, password=password)
                 user.first_name = first_name
                 user.last_name = last_name
                 user.save()
+
+                # Verificar se o usuário já possui um perfil
+                if not hasattr(user, 'profile'):
+                    # Criar o perfil associado ao usuário
+                    profile = Profile.objects.create(user=user, nome=first_name)
+
                 return redirect('login')
     return render(request, 'usuarios/cadastro.html')
 
