@@ -7,7 +7,6 @@ from django.http import HttpResponse
 from django.template import loader
 from django.urls import reverse
 
-
 def index(request):
     return render(request, 'usuarios/index.html')
 
@@ -85,7 +84,7 @@ def user_profile(request, id=None):
         # Lidar com o caso em que id não está presente
         return HttpResponse("ID não fornecido")
     
-
+"""
 def filtro(request):
   mydata = Animes.objects.filter(name__icontains='one punch').order_by('name', 'id').values()
   template = loader.get_template('usuarios/filtro.html')
@@ -93,3 +92,51 @@ def filtro(request):
     'filtragem': mydata
   }
   return HttpResponse(template.render(context, request))
+
+
+@login_required
+def filtro(request):
+    profile = request.user.profile
+    id = profile.id
+
+    filtro_anime = request.GET.get('anime', None)
+    data_query = {}
+
+    if filtro_anime:
+        data_query['name__icontains'] = filtro_anime
+
+    filtragem = Animes.objects.filter(**data_query).order_by('name', 'id')
+
+    context = {
+        'id': id,
+        'filtragem': filtragem
+    }
+    return render(request, 'usuarios/filtro.html', context)"""
+
+@login_required
+def filtro(request):
+    profile = request.user.profile
+    id = profile.id
+
+    filtro_anime = request.GET.get('anime', None)
+    data_query = {}
+
+    if filtro_anime:
+        data_query['name__icontains'] = filtro_anime
+
+    filtragem = Animes.objects.filter(**data_query).order_by('name', 'id')
+
+    # Filtrar apenas valores únicos na coluna "name"
+    unique_names = set()
+    unique_results = []
+    
+    for anime in filtragem:
+        if anime.name not in unique_names:
+            unique_names.add(anime.name)
+            unique_results.append(anime)
+
+    context = {
+        'id': id,
+        'filtragem': unique_results
+    }
+    return render(request, 'usuarios/filtro.html', context)
