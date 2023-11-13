@@ -84,35 +84,6 @@ def user_profile(request, id=None):
         # Lidar com o caso em que id não está presente
         return HttpResponse("ID não fornecido")
     
-"""
-def filtro(request):
-  mydata = Animes.objects.filter(name__icontains='one punch').order_by('name', 'id').values()
-  template = loader.get_template('usuarios/filtro.html')
-  context = {
-    'filtragem': mydata
-  }
-  return HttpResponse(template.render(context, request))
-
-
-@login_required
-def filtro(request):
-    profile = request.user.profile
-    id = profile.id
-
-    filtro_anime = request.GET.get('anime', None)
-    data_query = {}
-
-    if filtro_anime:
-        data_query['name__icontains'] = filtro_anime
-
-    filtragem = Animes.objects.filter(**data_query).order_by('name', 'id')
-
-    context = {
-        'id': id,
-        'filtragem': filtragem
-    }
-    return render(request, 'usuarios/filtro.html', context)"""
-
 @login_required
 def filtro(request):
     profile = request.user.profile
@@ -147,4 +118,33 @@ def filtro(request):
             'id': id,
             'filtragem': None
         }
+    return render(request, 'usuarios/filtro.html', context)
+
+@login_required
+def avaliar_anime(request):
+    id = request.user.id  # Use isso se o ID do usuário estiver disponível no request.user.id
+    
+    if request.method == "POST":
+        anime_id = request.POST.get("anime_id", None)
+        valor = int(request.POST.get("valor", 0))
+        descricao = request.POST.get("descricao", "")
+
+        # Certifique-se de que o ID do anime e do usuário está disponível antes de continuar
+        if anime_id is not None and id is not None:
+            profile = Profile.objects.get(id=id)
+            anime = Animes.objects.get(id=anime_id)
+
+            # Verifica se já existe uma avaliação para este usuário e anime
+            nota, created = Rating.objects.get_or_create(user_id=profile, anime_id=anime)
+            
+            nota.rating = valor
+            nota.descricao = descricao
+            nota.save()
+
+            return redirect('user_profile', id=id)
+    
+    # Se o método não for POST, renderiza a página com o formulário de avaliação
+    context = {
+        'id': id,
+    }
     return render(request, 'usuarios/filtro.html', context)

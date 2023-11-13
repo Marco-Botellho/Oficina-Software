@@ -141,11 +141,7 @@
                     </div>
                 </div>
 
-                <!-- Exibir mensagens de sucesso ou erro após a avaliação -->
-                {% for message in messages %}
-                    <div>{{ message }}</div>
-                {% endfor %}
-
+                <!-- Script JavaScript -->
                 <script>
                     // Atualiza o valor do campo anime_id no formulário de avaliação com base no botão clicado
                     $('.btn-avaliar').on('click', function() {
@@ -158,6 +154,11 @@
                         $('#formAvaliacao')[0].reset();
                     });
                 </script>
+
+                <!-- Exibir mensagens de sucesso ou erro após a avaliação -->
+                {% for message in messages %}
+                    <div>{{ message }}</div>
+                {% endfor %}
 
             {% elif request.GET.anime %}
                 <p>Nenhum resultado encontrado.</p>
@@ -219,11 +220,11 @@
 
 <!-- Js Plugins -->
 <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/player.js' %}"></script>
 <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
 <script src="{% static 'js/mixitup.min.js' %}"></script>
 <script src="{% static 'js/jquery.slicknav.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/owl.carousel.min.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
 <script src="{% static 'js/personalizado.js' %}"></script>
