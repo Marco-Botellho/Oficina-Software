@@ -25,7 +25,7 @@ class Animes(models.Model):
 class Profile(models.Model):
     nome = models.CharField(null=True, blank=True, max_length=150)
     user = models.OneToOneField(User, related_name='profile', verbose_name='Usuário', on_delete=models.CASCADE)
-    id = models.BigAutoField(primary_key=True)  # Valor inicial da sequência
+    id = models.BigAutoField(primary_key=True)  # , default=80000 Valor inicial da sequência
 
     class Meta:
         verbose_name = "Perfil"
