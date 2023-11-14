@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import loader
 from django.urls import reverse
+from .forms import RatingForm
 
 def index(request):
     return render(request, 'usuarios/index.html')
@@ -109,32 +110,32 @@ def filtro(request):
         
         context = {
             'id': id,
-            'filtragem': unique_results
+            'filtragem': unique_results,
+            'rating_form': RatingForm(),
         }
 
     else:
         # Se não houver resultados, definir a variável filtragem como None
         context = {
             'id': id,
-            'filtragem': None
+            'filtragem': None,
+            'rating_form': RatingForm(),
         }
     return render(request, 'usuarios/filtro.html', context)
 
 @login_required
 def avaliar_anime(request):
-    id = request.user.id  # Use isso se o ID do usuário estiver disponível no request.user.id
+    id = request.user.id
     
     if request.method == "POST":
         anime_id = request.POST.get("anime_id", None)
         valor = int(request.POST.get("valor", 0))
         descricao = request.POST.get("descricao", "")
 
-        # Certifique-se de que o ID do anime e do usuário está disponível antes de continuar
         if anime_id is not None and id is not None:
             profile = Profile.objects.get(id=id)
             anime = Animes.objects.get(id=anime_id)
 
-            # Verifica se já existe uma avaliação para este usuário e anime
             nota, created = Rating.objects.get_or_create(user_id=profile, anime_id=anime)
             
             nota.rating = valor
@@ -142,9 +143,9 @@ def avaliar_anime(request):
             nota.save()
 
             return redirect('user_profile', id=id)
-    
-    # Se o método não for POST, renderiza a página com o formulário de avaliação
+
     context = {
         'id': id,
+        'rating_form': RatingForm(),
     }
     return render(request, 'usuarios/filtro.html', context)

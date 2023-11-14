@@ -48,8 +48,8 @@ def update_user_profile(sender, instance, created, **kwargs):
 
 class Rating(models.Model):
     id = models.AutoField(primary_key=True)
-    user_id = models.IntegerField(blank=True, null=True)
-    anime_id = models.IntegerField(blank=True, null=True)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    anime = models.ForeignKey(Animes, on_delete=models.CASCADE, related_name='ratings')
     rating = models.IntegerField(blank=True, null=True)
 
     class Meta:

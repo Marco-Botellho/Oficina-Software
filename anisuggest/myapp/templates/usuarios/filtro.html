@@ -143,15 +143,17 @@
 
                 <!-- Script JavaScript -->
                 <script>
-                    // Atualiza o valor do campo anime_id no formulário de avaliação com base no botão clicado
-                    $('.btn-avaliar').on('click', function() {
-                        var animeId = $(this).data('anime-id');
-                        $('#animeId').val(animeId);
-                    });
-
-                    // Limpa o formulário de avaliação ao fechar o modal
-                    $('#modalAvaliacao').on('hidden.bs.modal', function (e) {
-                        $('#formAvaliacao')[0].reset();
+                    $(document).ready(function() {
+                        // Atualiza o valor do campo anime_id no formulário de avaliação com base no botão clicado
+                        $('.btn-avaliar').on('click', function() {
+                            var animeId = $(this).data('anime-id');
+                            $('#animeId').val(animeId);
+                        });
+                
+                        // Limpa o formulário de avaliação ao fechar o modal
+                        $('#modalAvaliacao').on('hidden.bs.modal', function (e) {
+                            $('#formAvaliacao')[0].reset();
+                        });
                     });
                 </script>
 
