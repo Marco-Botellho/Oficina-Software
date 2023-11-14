@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 
 class Animes(models.Model):
@@ -50,7 +52,7 @@ class Rating(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     anime = models.ForeignKey(Animes, on_delete=models.CASCADE, related_name='ratings')
-    rating = models.IntegerField(blank=True, null=True)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
 
     class Meta:
         managed = False

@@ -123,6 +123,7 @@ def filtro(request):
         }
     return render(request, 'usuarios/filtro.html', context)
 
+"""
 @login_required
 def avaliar_anime(request):
     id = request.user.id
@@ -130,22 +131,56 @@ def avaliar_anime(request):
     if request.method == "POST":
         anime_id = request.POST.get("anime_id", None)
         valor = int(request.POST.get("valor", 0))
-        descricao = request.POST.get("descricao", "")
 
-        if anime_id is not None and id is not None:
-            profile = Profile.objects.get(id=id)
-            anime = Animes.objects.get(id=anime_id)
+        if 1 <= valor <= 10:  # Verifica se a nota está dentro do intervalo desejado
+            if anime_id is not None and id is not None:
+                profile = Profile.objects.get(id=id)
+                anime = Animes.objects.get(id=anime_id)
 
-            nota, created = Rating.objects.get_or_create(user_id=profile, anime_id=anime)
-            
-            nota.rating = valor
-            nota.descricao = descricao
-            nota.save()
+                nota, created = Rating.objects.get_or_create(user_id=profile, anime_id=anime)
+                
+                nota.rating = valor
+                nota.save()
 
-            return redirect('user_profile', id=id)
+                return redirect('user_profile', id=id)
+
+        context = {
+            'id': id,
+            'rating_form': RatingForm(),
+        }
+        return render(request, 'usuarios/filtro.html', context)"""
+    
+@login_required
+def avaliar_anime(request):
+    id = request.user.id
+    
+    if request.method == "POST":
+        rating_form = RatingForm(request.POST)
+
+        if rating_form.is_valid():
+            anime_id = request.POST.get("anime_id", None)
+            valor = rating_form.cleaned_data['rating']
+
+            if anime_id is not None and id is not None:
+                profile = Profile.objects.get(id=id)
+                anime = Animes.objects.get(id=anime_id)
+
+                nota, created = Rating.objects.get_or_create(user_id=profile, anime_id=anime)
+                
+                nota.rating = valor
+                nota.save()
+
+                return redirect('user_profile', id=id)
+        else:
+            # Se o formulário não for válido, você pode querer fazer algo aqui,
+            # como exibir mensagens de erro personalizadas.
+            # Por exemplo, você pode acessar os erros assim: rating_form.errors
+            print(rating_form.errors)
+    else:
+        rating_form = RatingForm()
 
     context = {
         'id': id,
-        'rating_form': RatingForm(),
+        'rating_form': rating_form,
     }
     return render(request, 'usuarios/filtro.html', context)
