@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Animes, Profile, Rating
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.template import loader
 from django.urls import reverse
 from .forms import RatingForm
 
@@ -52,24 +51,6 @@ def logout_view(request):
     logout(request)
     return redirect('index')
 
-"""
-@login_required
-def logado(request):
-    animes = Animes.objects.all()
-    context = {
-        'animes': animes
-    }
-    return render(request, 'usuarios/logado.html', context)
-
-
-@login_required
-def user_profile(request, id):
-    #user_profile = User.objects.filter(id=id).first()
-    profile = Profile.objects.filter(id=id).first()
-    context = {
-        'profile':profile
-    }
-    return render(request, 'usuarios/logado.html', context)"""
 
 @login_required
 def user_profile(request, id=None):
@@ -123,32 +104,6 @@ def filtro(request):
         }
     return render(request, 'usuarios/filtro.html', context)
 
-"""
-@login_required
-def avaliar_anime(request):
-    id = request.user.id
-    
-    if request.method == "POST":
-        anime_id = request.POST.get("anime_id", None)
-        valor = int(request.POST.get("valor", 0))
-
-        if 1 <= valor <= 10:  # Verifica se a nota está dentro do intervalo desejado
-            if anime_id is not None and id is not None:
-                profile = Profile.objects.get(id=id)
-                anime = Animes.objects.get(id=anime_id)
-
-                nota, created = Rating.objects.get_or_create(user_id=profile, anime_id=anime)
-                
-                nota.rating = valor
-                nota.save()
-
-                return redirect('user_profile', id=id)
-
-        context = {
-            'id': id,
-            'rating_form': RatingForm(),
-        }
-        return render(request, 'usuarios/filtro.html', context)"""
     
 @login_required
 def avaliar_anime(request):
@@ -172,9 +127,6 @@ def avaliar_anime(request):
 
                 return redirect('user_profile', id=id)
         else:
-            # Se o formulário não for válido, você pode querer fazer algo aqui,
-            # como exibir mensagens de erro personalizadas.
-            # Por exemplo, você pode acessar os erros assim: rating_form.errors
             print(rating_form.errors)
     else:
         rating_form = RatingForm()

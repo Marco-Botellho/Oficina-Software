@@ -4,8 +4,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-
-
 class Animes(models.Model):
     id = models.AutoField(primary_key=True)
     anime_id = models.IntegerField(blank=True, null=True)
