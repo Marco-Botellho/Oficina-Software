@@ -50,7 +50,7 @@
                             <ul>
                                 <li class="active"><a href="{% url 'index' %}">Página Inicial</a></li>
                                 <li><a href="{% url 'filtro' %}">Filtrar</a></li>
-                                <li><a href="#">Avaliar</a></li>
+                                <li><a href="{% url 'filtro' %}">Avaliar</a></li>
                                 <li><a href="#">Recomendações</a></li>
                             </ul>
                         </nav>
@@ -92,8 +92,8 @@
                         <th scope="col">Genêro</th>
                         <th scope="col">Tipo</th>
                         <th scope="col">Episódios</th>
-                        <th scope="col">Avaliação</th>
-                        <!--<th scope="col">Membros</th>-->
+                        <!--<th scope="col">Avaliação</th>
+                        <th scope="col">Membros</th>-->
                     </tr>
                 </thead>
                 <tbody class="table-dark">
@@ -104,8 +104,8 @@
                         <td>{{ x.genre }}</td>
                         <td>{{ x.type }}</td>
                         <td>{{ x.episodes }}</td>
-                        <td>{{ x.rating }}</td>
-                        <!--<td>{{ x.members }}</td>-->
+                        <!--<td>{{ x.rating }}</td>
+                        <td>{{ x.members }}</td>-->
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -138,7 +138,7 @@
                     <ul>
                         <li class="active"><a href="{% url 'index' %}">Página Inicial</a></li>
                         <li><a href="{% url 'filtro' %}">Filtrar</a></li>
-                        <li><a href="#">Avaliar</a></li>
+                        <li><a href="{% url 'filtro' %}">Avaliar</a></li>
                         <li><a href="#">Recomendações</a></li>
                     </ul>
                 </div>

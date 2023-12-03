@@ -352,6 +352,7 @@ ol {
 .header__menu ul li.active a {
 	background: #e53637;
 	color: #ffffff;
+	display: inline-block;
 }
 
 .header__menu ul li:hover a {
