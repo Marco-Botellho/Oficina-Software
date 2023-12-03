@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db.models import Avg
+
 
 class Animes(models.Model):
     id = models.AutoField(primary_key=True)
@@ -13,6 +15,15 @@ class Animes(models.Model):
     episodes = models.TextField(blank=True, null=True)
     rating = models.FloatField(blank=True, null=True)
     members = models.IntegerField(blank=True, null=True)
+
+    def update_average_rating(self):
+        # Calcula a média das avaliações para este anime
+        average_rating = Rating.objects.filter(anime=self).aggregate(Avg('rating'))['rating__avg']
+
+        # Atualiza o campo 'rating' do anime com a média calculada
+        if average_rating is not None:
+            self.rating = average_rating
+            self.save()
 
     class Meta:
         managed = False
@@ -55,3 +66,9 @@ class Rating(models.Model):
     class Meta:
         managed = False
         db_table = 'rating'
+
+
+@receiver(post_save, sender=Rating)
+def update_anime_rating(sender, instance, **kwargs):
+    anime = instance.anime
+    anime.update_average_rating()
