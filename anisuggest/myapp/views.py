@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .models import Animes, Profile, Rating
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.urls import reverse
 from .forms import RatingForm
 
@@ -107,31 +107,33 @@ def filtro(request):
     
 @login_required
 def avaliar_anime(request):
-    print("Iniciando avaliação do anime...")
     if request.method == "POST":
-        print("Recebido um POST...")
         rating_form = RatingForm(request.POST)
-        if rating_form.is_valid():
-            anime_id = request.POST.get("anime")
-            profile_id = request.POST.get("profile")
-            valor = rating_form.cleaned_data['rating']
+        
+        try:
+            if rating_form.is_valid():
+                anime_id = POST.get("anime")
+                profile_id = POST.get("profile")
+                valor = POST.get('rating')
 
-            print(f"Anime ID: {anime_id}, Profile ID: {profile_id}, Valor: {valor}")
+                profile1 = get_object_or_404(Profile, id=profile_id)
+                anime1 = get_object_or_404(Animes, id=anime_id)
 
-            profile = Profile.objects.get(id=profile_id)
-            anime = Animes.objects.get(id=anime_id)
-
-            try:
-                rating, created = Rating.objects.get_or_create(user=profile, anime=anime)
-                rating.rating = valor
+                #rating, created = Rating.objects.get_or_create(user=profile1, anime=anime1, defaults={'rating': valor})
+                rating = Rating.objects.aget_or_create(user=profile1, anime=anime1, rating=valor)
+                
+                #if not created:
+                #rating.rating = valor
                 rating.save()
-                print("Avaliação salva com sucesso!" if rating else "Erro ao salvar a avaliação")
+                    
                 return HttpResponse("Avaliação realizada com sucesso!")
-            except Exception as e:
-                print(f"Erro ao salvar avaliação: {e}")
-                return HttpResponse("Erro ao salvar a avaliação. Por favor, tente novamente.")
-        else:
-            print(rating_form.errors)
-            return HttpResponse("Formulário inválido. Por favor, verifique os campos.")
+            
+        except Profile.DoesNotExist:
+            return HttpResponse("Perfil não encontrado.")
+        
+        except Animes.DoesNotExist:
+            return HttpResponse("Anime não encontrado.")
+
+        return HttpResponse("Formulário inválido. Avaliação não realizada.")
     else:
-        return HttpResponse("Método de requisição inválido.")
+        return HttpResponse("Método não permitido para avaliação de anime.")
