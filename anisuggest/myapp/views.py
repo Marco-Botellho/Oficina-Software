@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -71,13 +71,33 @@ def filtro(request):
     profile = request.user.profile
     id = profile.id
 
+    if request.method == "POST":
+        rating_form = RatingForm(request.POST)
+        print(rating_form.__dict__)
+        
+        try:
+            if rating_form.is_valid():
+                anime_id = request.POST.get("anime")
+                profile_id = request.POST.get("profile")
+                valor = request.POST.get('rating')
+
+                avaliar_anime(anime_id, profile_id, valor)
+
+        except Exception as e:
+            print(e)
+        
+        return HttpResponseRedirect("/")
+
+
     filtro_anime = request.GET.get('anime', None)
     data_query = {}
 
     if filtro_anime:
         data_query['name__icontains'] = filtro_anime
-
-    filtragem = Animes.objects.filter(**data_query).order_by('name', 'id')
+        filtragem = Animes.objects.filter(**data_query).order_by('name', 'id')
+    
+    else:
+        filtragem = Animes.objects.filter().order_by('-rating')[:10]
     
     if filtragem.exists():
         # Filtrar apenas valores únicos na coluna "name"
@@ -88,28 +108,41 @@ def filtro(request):
             if anime.name not in unique_names:
                 unique_names.add(anime.name)
                 unique_results.append(anime)
-        
-        context = {
-            'id': id,
-            'filtragem': unique_results,
-            'rating_form': RatingForm(),
-        }
 
-    else:
-        # Se não houver resultados, definir a variável filtragem como None
-        context = {
-            'id': id,
-            'filtragem': None,
-            'rating_form': RatingForm(),
-        }
-    return render(request, 'usuarios/filtro.html', context)
+    else:        
+        unique_results = None
 
     
-@login_required
+    
+    context = {
+        'id': id,
+        'filtragem': unique_results,
+        'rating_form': RatingForm(),
+    }
+    return render(request, 'usuarios/filtro.html', context)
+
+
+def avaliar_anime(anime_id, profile_id, valor):    
+    
+    anime_id = int(str(anime_id).replace(".", ""))
+    profile_id = int(str(profile_id).replace(".", ""))
+    valor = int(str(valor))
+
+    profile1 = get_object_or_404(Profile, id=profile_id)
+    anime1 = get_object_or_404(Animes, id=anime_id)
+    rating = Rating.objects.get_or_create(user=profile1, anime=anime1, rating=valor)
+    rating.save()
+    anime1.update_average_rating()
+    anime1.save()
+    
+    
+
+"""
 def avaliar_anime(request):
+    print(request.__dict__)
     if request.method == "POST":
         rating_form = RatingForm(request.POST)
-        
+        print(rating_form.__dict__)
         try:
             if rating_form.is_valid():
                 anime_id = POST.get("anime")
@@ -137,7 +170,7 @@ def avaliar_anime(request):
         return HttpResponse("Formulário inválido. Avaliação não realizada.")
     else:
         return HttpResponse("Método não permitido para avaliação de anime.")
-
+"""
 
 # Recomendar por gênero de animes
 @login_required
