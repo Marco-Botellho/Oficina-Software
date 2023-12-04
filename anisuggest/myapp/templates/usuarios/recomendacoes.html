@@ -111,12 +111,10 @@
                             <th scope="col">Tipo</th>
                             <th scope="col">Episódios</th>
                             <th scope="col">Avaliação</th>
-                            <!--<th scope="col">Avaliar</th>
-                            <th scope="col">Membros</th>-->
                         </tr>
                     </thead>
                     <tbody class="table-dark">
-                        {% for x in selecao %}
+                        {% for x in selecao|slice:":10"  %}
                         <tr>
                             <td>{{ x.id }}</td>
                             <td>{{ x.name }}</td>
@@ -124,12 +122,6 @@
                             <td>{{ x.type }}</td>
                             <td>{{ x.episodes }}</td>
                             <td>{{ x.rating }}</td>
-                            <!--<td>
-                                <button type="button" class="btn-avaliar" data-anime-id="{{ x.id }}" data-toggle="modal" data-target="#modalAvaliacao">
-                                    Avaliar
-                                </button>
-                            </td>
-                            <td>{{ x.members }}</td>-->
                         </tr>
                         {% endfor %}
                     </tbody>
