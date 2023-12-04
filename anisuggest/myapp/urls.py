@@ -21,4 +21,7 @@ urlpatterns = [
     # usuarios.com/filtro
     path('filtro/',views.filtro,name='filtro'),
 
+    path('avaliar_anime/', views.avaliar_anime, name='avaliar_anime'),
+    path('avaliacao_resultado/', views.avaliacao_resultado, name='avaliacao_resultado'),
+
 ]

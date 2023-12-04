@@ -130,7 +130,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="#" id="formAvaliacao">
+                                <form method="POST" action="{% url 'avaliar_anime' %}" id="formAvaliacao">
                                     {% csrf_token %}
                                     <input type="hidden" name="anime" id="animeId" value="{{ anime.id }}">
                                     <input type="hidden" name="profile" id="profileId" value="{{ profile.id }}">
