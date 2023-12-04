@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -137,3 +137,43 @@ def avaliar_anime(request):
         return HttpResponse("Formulário inválido. Avaliação não realizada.")
     else:
         return HttpResponse("Método não permitido para avaliação de anime.")
+
+
+# Recomendar por gênero de animes
+@login_required
+def recomendacoes(request):
+    profile = request.user.profile
+    id = profile.id
+
+    filtro_genero = request.GET.get('genre', None)
+    data_query = {}
+
+    if filtro_genero:
+        data_query['genre__icontains'] = filtro_genero
+
+    selecao = Animes.objects.filter(**data_query).order_by('-rating', 'name', 'id')
+    
+    if selecao.exists():
+        # Filtrar apenas valores únicos na coluna "name"
+        unique_names = set()
+        unique_results = []
+        
+        for anime in selecao:
+            if anime.name not in unique_names:
+                unique_names.add(anime.name)
+                unique_results.append(anime)
+        
+        context = {
+            'id': id,
+            'selecao': unique_results,
+            'rating_form': RatingForm(),
+        }
+
+    else:
+        # Se não houver resultados, definir a variável selecao como None
+        context = {
+            'id': id,
+            'selecao': None,
+            'rating_form': RatingForm(),
+        }
+    return render(request, 'usuarios/recomendacoes.html', context)

@@ -21,6 +21,9 @@ urlpatterns = [
     # usuarios.com/filtro
     path('filtro/',views.filtro,name='filtro'),
 
+    # usuarios.com/recomendacoes
+    path('recomendacoes/', views.recomendacoes, name='recomendacoes'),
+
     #path('avaliar_anime/<int:anime_id>/', views.avaliar_anime, name='avaliar_anime'),
     #path('avaliacao_resultado/', views.avaliacao_resultado, name='avaliacao_resultado'),
 

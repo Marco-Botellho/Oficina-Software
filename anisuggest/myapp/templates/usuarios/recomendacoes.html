@@ -8,7 +8,7 @@
     <meta name="keywords" content="Anime, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Anisuggest | Filtro</title>
+    <title>Anisuggest | Recomendação</title>
 
     <script>
         var profileId = '{{ request.user.profile.id }}'; // Obtém o ID do perfil do usuário logado
@@ -30,6 +30,17 @@
     <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+
+    <style>
+        /* CSS para estilizar o parágrafo */
+        p.destaque {
+            font-weight: bold;
+            font-size: 22px;
+            font-family: Arial, sans-serif;
+            color: aliceblue;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -76,12 +87,12 @@
     <section class="product spad">
 
         <div class="container">
-            <!--<p>Animes encontrados no banco de dados:</p>-->
-            
+            <p class="destaque">Recomendação de Animes por Gênero:</p>
+                        
             <div class="filtro-form">
-                <form method="GET" action="{% url 'filtro' %}">
+                <form method="GET" action="{% url 'recomendacoes' %}">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Digite o nome do anime" name="anime">
+                        <input type="text" class="form-control" placeholder="Digite o gênero do anime" name="genre">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit">Buscar</button>
                         </div>
@@ -89,7 +100,7 @@
                 </form>
             </div>
 
-            {% if filtragem %}
+            {% if selecao %}
                 <table class="table">
                     {% csrf_token %}
                     <thead>
@@ -100,12 +111,12 @@
                             <th scope="col">Tipo</th>
                             <th scope="col">Episódios</th>
                             <th scope="col">Avaliação</th>
-                            <th scope="col">Avaliar</th>
-                            <!--<th scope="col">Membros</th>-->
+                            <!--<th scope="col">Avaliar</th>
+                            <th scope="col">Membros</th>-->
                         </tr>
                     </thead>
                     <tbody class="table-dark">
-                        {% for x in filtragem %}
+                        {% for x in selecao %}
                         <tr>
                             <td>{{ x.id }}</td>
                             <td>{{ x.name }}</td>
@@ -113,87 +124,18 @@
                             <td>{{ x.type }}</td>
                             <td>{{ x.episodes }}</td>
                             <td>{{ x.rating }}</td>
-                            <td>
+                            <!--<td>
                                 <button type="button" class="btn-avaliar" data-anime-id="{{ x.id }}" data-toggle="modal" data-target="#modalAvaliacao">
                                     Avaliar
                                 </button>
                             </td>
-                            <!--<td>{{ x.members }}</td>-->
+                            <td>{{ x.members }}</td>-->
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
 
-                <!-- Modal de Avaliação -->
-                <div class="modal fade" id="modalAvaliacao" tabindex="-1" role="dialog" aria-labelledby="modalAvaliacaoLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalAvaliacaoLabel">Avaliação do Anime</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="POST" id="formAvaliacao">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="anime" id="animeId" value="{{ anime.id }}">
-                                    <input type="hidden" name="profile" id="profileId" value="{{ profile.id }}">
-                                    {{ rating_form.as_p }}
-                                    <button type="submit" class="btn btn-primary">Salvar Avaliação</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Script JavaScript -->
-                <script>
-                    $(document).ready(function() {
-                        // Atualiza o valor do campo anime_id no formulário de avaliação com base no botão clicado
-                        $('.btn-avaliar').on('click', function() {
-                            var animeId = $(this).data('anime-id');
-                            $('#animeId').val(animeId);
-                        });
-
-                        // Limpa o formulário de avaliação ao fechar o modal
-                        $('#modalAvaliacao').on('hidden.bs.modal', function (e) {
-                            $('#formAvaliacao')[0].reset();
-                        });
-
-                        $('#formAvaliacao').on('submit', function(event) {
-                            event.preventDefault(); // Evita o envio padrão do formulário
-
-                            // Preenche o campo 'profile' no formulário com o ID do perfil
-                            $('#profileId').val(profileId);
-
-                            var formData = $(this).serialize(); // Obtém os dados do formulário
-                            console.log("Dados do formulário:", formData);
-                            $.ajax({
-                                type: 'POST',
-                                url: window.location.href, // Envio para a mesma página
-                                data: formData,
-                                success: function(response) {
-                                    // Atualize a exibição conforme necessário
-                                    console.log(response); // Apenas para depuração, você pode fazer algo com a resposta recebida
-
-                                    // Fecha o modal após o envio bem-sucedido do formulário
-                                    $('#modalAvaliacao').modal('hide');
-                                },
-                                error: function(error) {
-                                    // Lide com erros, se houver algum
-                                    console.error(error);
-                                }
-                            });
-                        });
-                    });
-                </script>
-
-                <!-- Exibir mensagens de sucesso ou erro após a avaliação -->
-                {% for message in messages %}
-                    <div>{{ message }}</div>
-                {% endfor %}
-
+                
             {% elif request.GET.anime %}
                 <p>Nenhum resultado encontrado.</p>
             {% endif %}
