@@ -7,7 +7,7 @@ from django.db.models import Avg
 
 
 class Animes(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True) # essa é a chave estrangeira em rating
     anime_id = models.IntegerField(blank=True, null=True)
     name = models.TextField(blank=True, null=True)
     genre = models.TextField(blank=True, null=True)
@@ -36,7 +36,7 @@ class Animes(models.Model):
 class Profile(models.Model):
     nome = models.CharField(null=True, blank=True, max_length=150)
     user = models.OneToOneField(User, related_name='profile', verbose_name='Usuário', on_delete=models.CASCADE)
-    id = models.BigAutoField(primary_key=True)  # , default=80000 Valor inicial da sequência
+    id = models.BigAutoField(primary_key=True)  # , default=80000 Valor inicial da sequência  # essa é a chave estrangeira em rating
 
     class Meta:
         verbose_name = "Perfil"

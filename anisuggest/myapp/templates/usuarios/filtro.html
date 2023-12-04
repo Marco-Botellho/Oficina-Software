@@ -132,7 +132,8 @@
                             <div class="modal-body">
                                 <form method="post" action="#" id="formAvaliacao">
                                     {% csrf_token %}
-                                    <input type="hidden" name="anime_id" id="animeId" value="">
+                                    <input type="hidden" name="anime" id="animeId" value="{{ anime.id }}">
+                                    <input type="hidden" name="profile" id="profileId" value="{{ profile.id }}">
                                     {{ rating_form.as_p }}
                                     <button type="submit" class="btn btn-primary">Salvar Avaliação</button>
                                 </form>
