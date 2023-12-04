@@ -107,87 +107,31 @@ def filtro(request):
     
 @login_required
 def avaliar_anime(request):
-    id = request.user.id
-    
+    print("Iniciando avaliação do anime...")
     if request.method == "POST":
+        print("Recebido um POST...")
         rating_form = RatingForm(request.POST)
-
         if rating_form.is_valid():
-            anime_id = request.POST.get("anime_id")
+            anime_id = request.POST.get("anime")
             profile_id = request.POST.get("profile")
             valor = rating_form.cleaned_data['rating']
 
-            print(f"Anime ID: {anime_id}")  # Verificar se o ID do anime está sendo enviado corretamente
-            print(f"Profile ID: {profile_id}")  # Verificar se o ID do perfil está sendo enviado corretamente
+            print(f"Anime ID: {anime_id}, Profile ID: {profile_id}, Valor: {valor}")
 
-            if anime_id is not None and id is not None:
-                profile = Profile.objects.get(id=id)
-                anime = Animes.objects.get(id=anime_id)
+            profile = Profile.objects.get(id=profile_id)
+            anime = Animes.objects.get(id=anime_id)
 
-                # Corrigindo a criação ou obtenção do objeto Rating
+            try:
                 rating, created = Rating.objects.get_or_create(user=profile, anime=anime)
-                print(f"Rating object: {rating}")  # Verificar se o objeto Rating está sendo corretamente recuperado/criado
-                rating.rating = valor  # Atribuindo o valor ao campo 'rating' do Rating
-                print(f"New rating value: {rating.rating}")  # Verificar se 'valor' está correto
-                try:
-                    rating.save()
-                    return redirect('avaliacao_resultado', sucesso=True)
-                except Exception as e:
-                    print(f"Erro ao salvar avaliação: {e}")
-                    return redirect('avaliacao_resultado', sucesso=False)
-                
-                return HttpResponse("Avaliação realizada com sucesso!")  # Uma resposta para verificar o processo
-
-                #return redirect('user_profile', id=id)
+                rating.rating = valor
+                rating.save()
+                print("Avaliação salva com sucesso!" if rating else "Erro ao salvar a avaliação")
+                return HttpResponse("Avaliação realizada com sucesso!")
+            except Exception as e:
+                print(f"Erro ao salvar avaliação: {e}")
+                return HttpResponse("Erro ao salvar a avaliação. Por favor, tente novamente.")
         else:
             print(rating_form.errors)
+            return HttpResponse("Formulário inválido. Por favor, verifique os campos.")
     else:
-        rating_form = RatingForm()
-
-    context = {
-        'id': id,
-        'rating_form': rating_form,
-    }
-    return render(request, 'usuarios/filtro.html', context)
-
-def avaliacao_resultado(request, sucesso):
-    if sucesso:
-        mensagem = "Avaliação salva com sucesso!"
-    else:
-        mensagem = "Erro ao salvar a avaliação. Por favor, tente novamente."
-
-    return HttpResponse(mensagem)
-
-"""
-@login_required
-def avaliar_anime(request):
-    id = request.user.id
-    
-    if request.method == "POST":
-        rating_form = RatingForm(request.POST)
-
-        if rating_form.is_valid():
-            anime_id = request.POST.get("anime_id")
-            valor = rating_form.cleaned_data['rating']
-
-            if anime_id is not None and id is not None:
-                profile = Profile.objects.get(id=id)
-                anime = Animes.objects.get(id=anime_id)
-
-                nota, created = Rating.objects.get_or_create(user_id=profile, anime_id=anime)
-                
-                nota.rating = valor
-                nota.save()
-
-                return redirect('user_profile', id=id)
-        else:
-            print(rating_form.errors)
-    else:
-        rating_form = RatingForm()
-
-    context = {
-        'id': id,
-        'rating_form': rating_form,
-    }
-    return render(request, 'usuarios/filtro.html', context)
-"""
+        return HttpResponse("Método de requisição inválido.")

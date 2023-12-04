@@ -10,10 +10,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Anisuggest | Filtro</title>
 
+    <script>
+        var profileId = '{{ request.user.profile.id }}'; // Obtém o ID do perfil do usuário logado
+    </script>
+
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
@@ -130,7 +135,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="{% url 'avaliar_anime' %}" id="formAvaliacao">
+                                <form method="POST" id="formAvaliacao">
                                     {% csrf_token %}
                                     <input type="hidden" name="anime" id="animeId" value="{{ anime.id }}">
                                     <input type="hidden" name="profile" id="profileId" value="{{ profile.id }}">
@@ -150,10 +155,36 @@
                             var animeId = $(this).data('anime-id');
                             $('#animeId').val(animeId);
                         });
-                
+
                         // Limpa o formulário de avaliação ao fechar o modal
                         $('#modalAvaliacao').on('hidden.bs.modal', function (e) {
                             $('#formAvaliacao')[0].reset();
+                        });
+
+                        $('#formAvaliacao').on('submit', function(event) {
+                            event.preventDefault(); // Evita o envio padrão do formulário
+
+                            // Preenche o campo 'profile' no formulário com o ID do perfil
+                            $('#profileId').val(profileId);
+
+                            var formData = $(this).serialize(); // Obtém os dados do formulário
+                            console.log("Dados do formulário:", formData);
+                            $.ajax({
+                                type: 'POST',
+                                url: window.location.href, // Envio para a mesma página
+                                data: formData,
+                                success: function(response) {
+                                    // Atualize a exibição conforme necessário
+                                    console.log(response); // Apenas para depuração, você pode fazer algo com a resposta recebida
+
+                                    // Fecha o modal após o envio bem-sucedido do formulário
+                                    $('#modalAvaliacao').modal('hide');
+                                },
+                                error: function(error) {
+                                    // Lide com erros, se houver algum
+                                    console.error(error);
+                                }
+                            });
                         });
                     });
                 </script>
@@ -170,67 +201,62 @@
         </div>
     </section>
     
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- Product Section End -->
+    <!-- Product Section End -->
 
-<!-- Footer Section Begin -->
-<footer class="footer">
-    <div class="page-up">
-        <a href="#" id="scrollToTopButton"><span class="arrow_carrot-up"></span></a>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="footer__logo">
-                    <a href="{% url 'index' %}"><img src="{% static 'img/logo24.jpg' %}" alt=""></a>
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="page-up">
+            <a href="#" id="scrollToTopButton"><span class="arrow_carrot-up"></span></a>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="footer__logo">
+                        <a href="{% url 'index' %}"><img src="{% static 'img/logo24.jpg' %}" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="footer__nav">
+                        <ul>
+                            <li class="active"><a href="{% url 'index' %}">Página Inicial</a></li>
+                            <li><a href="{% url 'filtro' %}">Filtrar</a></li>
+                            <li><a href="#">Avaliar</a></li>
+                            <li><a href="#">Recomendações</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos os direitos reservados.</a>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="footer__nav">
-                    <ul>
-                        <li class="active"><a href="{% url 'index' %}">Página Inicial</a></li>
-                        <li><a href="{% url 'filtro' %}">Filtrar</a></li>
-                        <li><a href="#">Avaliar</a></li>
-                        <li><a href="#">Recomendações</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                  Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos os direitos reservados.</a>
-                  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
 
-              </div>
-          </div>
-      </div>
-  </footer>
-  <!-- Footer Section End -->
-
-  <!-- Search model Begin -->
-  <div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch"><i class="icon_close"></i></div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Procure aqui.....">
-        </form>
+    <!-- Search model Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch"><i class="icon_close"></i></div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Procure aqui.....">
+            </form>
+        </div>
     </div>
-</div>
-<!-- Search model end -->
+    <!-- Search model end -->
 
-<!-- Js Plugins -->
-<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-<script src="{% static 'js/player.js' %}"></script>
-<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
-<script src="{% static 'js/mixitup.min.js' %}"></script>
-<script src="{% static 'js/jquery.slicknav.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/owl.carousel.min.js' %}"></script>
-<script src="{% static 'js/main.js' %}"></script>
-<script src="{% static 'js/personalizado.js' %}"></script>
+    <!-- Js Plugins -->
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/player.js' %}"></script>
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'js/mixitup.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slicknav.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/personalizado.js' %}"></script>
 </body>
 
 </html>
