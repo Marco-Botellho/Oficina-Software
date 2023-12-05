@@ -71,24 +71,6 @@ def filtro(request):
     profile = request.user.profile
     id = profile.id
 
-    if request.method == "POST":
-        rating_form = RatingForm(request.POST)
-        print(rating_form.__dict__)
-        
-        try:
-            if rating_form.is_valid():
-                anime_id = request.POST.get("anime")
-                profile_id = request.POST.get("profile")
-                valor = request.POST.get('rating')
-
-                avaliar_anime(anime_id, profile_id, valor)
-
-        except Exception as e:
-            print(e)
-        
-        return HttpResponseRedirect("/")
-
-
     filtro_anime = request.GET.get('anime', None)
     data_query = {}
 
@@ -112,7 +94,22 @@ def filtro(request):
     else:        
         unique_results = None
 
-    
+    if request.method == "POST":
+        rating_form = RatingForm(request.POST)
+        
+        try:
+            if rating_form.is_valid():
+                anime_id = request.POST.get("anime")
+                profile_id = request.POST.get("profile")
+                valor = request.POST.get('rating')
+
+                avaliar_anime(anime_id, profile_id, valor)
+
+        except Exception as e:
+            print(e)
+        
+        #return HttpResponseRedirect(f"/?anime={filtro_anime}")
+        return redirect('/')
     
     context = {
         'id': id,
@@ -130,47 +127,10 @@ def avaliar_anime(anime_id, profile_id, valor):
 
     profile1 = get_object_or_404(Profile, id=profile_id)
     anime1 = get_object_or_404(Animes, id=anime_id)
-    rating = Rating.objects.get_or_create(user=profile1, anime=anime1, rating=valor)
-    rating.save()
+    Rating.objects.update_or_create(user=profile1, anime=anime1, rating=valor)
     anime1.update_average_rating()
     anime1.save()
-    
-    
 
-"""
-def avaliar_anime(request):
-    print(request.__dict__)
-    if request.method == "POST":
-        rating_form = RatingForm(request.POST)
-        print(rating_form.__dict__)
-        try:
-            if rating_form.is_valid():
-                anime_id = POST.get("anime")
-                profile_id = POST.get("profile")
-                valor = POST.get('rating')
-
-                profile1 = get_object_or_404(Profile, id=profile_id)
-                anime1 = get_object_or_404(Animes, id=anime_id)
-
-                #rating, created = Rating.objects.get_or_create(user=profile1, anime=anime1, defaults={'rating': valor})
-                rating = Rating.objects.aget_or_create(user=profile1, anime=anime1, rating=valor)
-                
-                #if not created:
-                #rating.rating = valor
-                rating.save()
-                    
-                return HttpResponse("Avaliação realizada com sucesso!")
-            
-        except Profile.DoesNotExist:
-            return HttpResponse("Perfil não encontrado.")
-        
-        except Animes.DoesNotExist:
-            return HttpResponse("Anime não encontrado.")
-
-        return HttpResponse("Formulário inválido. Avaliação não realizada.")
-    else:
-        return HttpResponse("Método não permitido para avaliação de anime.")
-"""
 
 # Recomendar por gênero de animes
 @login_required
